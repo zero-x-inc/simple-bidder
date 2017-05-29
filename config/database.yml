@@ -1,0 +1,17 @@
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: simple_bidder_test
+  username: postgres
+  password:
+  host: localhost
+  port: 5432
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: simple_bidder_development
+  username: postgres
+  password:
+  host: localhost
+  port: 5432
