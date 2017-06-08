@@ -25,6 +25,7 @@ class CreateEvents < ActiveRecord::Migration
       t.string :gender
       t.string :yob
       t.integer :cost
+      t.integer :price
       t.timestamp :timestamp
     end
   end

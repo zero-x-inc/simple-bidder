@@ -1,12 +1,13 @@
 module V1
-  class EventsController < SimpleBidderApp
+  class WinsController < SimpleBidderApp
     get '/' do
       scope = EventScopeLoader.call(data: params)
 
-      event = Event.new(
-        type: params['type'],
+      event = Win.new(
+        type: 'win',
         timestamp: DateTime.now.utc,
-        bid_request_id: scope.bid.present? ? scope.bid.bid_request_id : nil
+        bid_request_id: scope.bid.present? ? scope.bid.bid_request_id : nil,
+        price: params['price']
       )
 
       event = EventScopeSetter.call(

@@ -5,11 +5,11 @@ require 'rspec'
 require 'rack/test'
 require './spec/spec_helper'
 
-describe V1::BidRequestController do
+describe V1::WinsController do
   include Rack::Test::Methods
 
   def app
-    V1::EventsController
+    V1::WinsController
   end
 
   context '.create' do
@@ -57,7 +57,12 @@ describe V1::BidRequestController do
       let(:device) {
         create(
           :device,
-          external_id: SecureRandom.hex
+          external_id: SecureRandom.hex,
+          make: 'Apple',
+          model: 'Apple',
+          os: 'iOS',
+          osv: '7.1',
+          js: 1
         )
       }
 
@@ -72,7 +77,9 @@ describe V1::BidRequestController do
         create(
           :user,
           exchange: exchange,
-          external_id: SecureRandom.hex
+          external_id: SecureRandom.hex,
+          gender: 'm',
+          yob: '1986'
         )
       }
 
@@ -82,7 +89,7 @@ describe V1::BidRequestController do
           bid_request_id: SecureRandom.hex,
           type: 'bid',
           cost: (1.50 * 1_000_000).to_i,
-          timestamp: DateTime.now.utc,
+          timestamp: DateTime.now.utc - 1.minute,
           exchange: exchange,
           publisher: publisher,
           app: bid_app,
@@ -90,7 +97,15 @@ describe V1::BidRequestController do
           user: user,
           country: 'USA',
           region: 'California',
-          city: 'Los Angeles'
+          city: 'Los Angeles',
+          dimension: '320x480',
+          make: 'Apple',
+          model: 'Apple',
+          os: 'iOS',
+          osv: '7.1',
+          js: 1,
+          gender: 'm',
+          yob: '1986'
         )
       }
 
@@ -99,7 +114,7 @@ describe V1::BidRequestController do
           {
             'advertisement_id' => advertisement.id,
             'bid_id' => bid.id,
-            'type' => 'win'
+            'price' => (1.50 * 1_000_000).to_i
           }
         }
 

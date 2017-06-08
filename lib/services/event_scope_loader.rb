@@ -17,6 +17,11 @@ class EventScopeLoader
         scope.device = bid.device_id.present? ? Device.find(bid.device_id) : nil
         scope.user = bid.user_id.present? ? User.find(bid.user_id) : nil
 
+        scope.slot = Slot.new(
+          width: bid.dimension.split('x').first,
+          height: bid.dimension.split('x').last
+        )
+
         scope.location = Location.new(
           country: bid.country,
           region: bid.region,

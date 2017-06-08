@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20170607234538) do
     t.string   "gender"
     t.string   "yob"
     t.integer  "cost"
+    t.integer  "price"
     t.datetime "timestamp"
   end
 

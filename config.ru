@@ -12,5 +12,5 @@ end
 
 run AnalyticsProxyApp.new
 map('/v1/bid_request') { run V1::BidRequestController }
-map('/v1/events') { run V1::EventsController }
+map('/v1/wins') { run V1::WinsController }
 map('/') { run SimpleBidderApp }
