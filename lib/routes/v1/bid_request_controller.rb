@@ -7,12 +7,24 @@ module V1
         }
       )
 
-      bid_request = BidRequestLoader.call(data: data)
+      scope = ScopeLoader.call(data: data)
+
+      bid_request = BidRequestCreator.call(
+        scope: scope,
+        data: data
+      )
+
+      scope.bid_request = bid_request
 
       if bid_request.present?
+        bid_request = EventScopeSetter.call(
+          event: bid_request,
+          scope: scope
+        )
+
         RealtimeSender.call(
-          data: BidRequestSerializer.call(
-            bid_request: bid_request
+          data: FirehoseSerializer.call(
+            event: bid_request
           )
         )
 
@@ -21,12 +33,23 @@ module V1
         )
 
         if advertisement.present?
+          scope.seat = advertisement.campaign.seat
+          scope.campaign = advertisement.campaign
+          scope.advertisement = advertisement
+
           bid = Bidder.call(
+            scope: scope,
             advertisement: advertisement,
             bid_request: bid_request
           )
 
           if bid.present? && bid.persisted?
+            RealtimeSender.call(
+              data: FirehoseSerializer.call(
+                event: bid
+              )
+            )
+
             bid_data = BidSerializer.call(
               bid: bid
             )

@@ -30,7 +30,7 @@ describe V1::BidRequestController do
       let!(:campaign) {
         create(
           :campaign,
-          seat_id: seat.id,
+          seat: seat,
           name: 'My Campaign'
         )
       }
@@ -38,36 +38,36 @@ describe V1::BidRequestController do
       let!(:advertisement) {
         create(
           :advertisement,
-          campaign_id: campaign.id,
+          campaign: campaign,
           name: 'My Rich Media Ad'
         )
       }
+
+      shared_examples 'successful bidding' do
+        it 'returns 201' do
+          expect(res.status).to eq(201)
+        end
+      end
 
       context 'when handling smaato' do
         let(:client_id) { 'smaato' }
         let(:data) { File.read('./samples/smaato/rich-media.json') }
 
-        it 'returns 201' do
-          expect(res.status).to eq(201)
-        end
+        it_behaves_like 'successful bidding'
       end
 
       context 'when handling rubicon' do
         let(:client_id) { 'rubicon' }
         let(:data) { File.read('./samples/rubiconproject/example-request-app-android-1.json') }
 
-        it 'returns 201' do
-          expect(res.status).to eq(201)
-        end
+        it_behaves_like 'successful bidding'
       end
   
       context 'when handling brandscreen' do
         let(:client_id) { 'brandscreen' }
         let(:data) { File.read('./samples/brandscreen/example-request-mobile.json') }
 
-        it 'returns 201' do
-          expect(res.status).to eq(201)
-        end
+        it_behaves_like 'successful bidding'
       end
     end
   end

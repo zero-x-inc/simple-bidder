@@ -46,6 +46,9 @@ ActiveRecord::Schema.define(version: 20170607234538) do
 
   create_table "events", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "type"
+    t.string   "seat_id"
+    t.string   "campaign_id"
+    t.string   "advertisement_id"
     t.string   "bid_request_id"
     t.string   "exchange_id"
     t.string   "publisher_id"
@@ -57,6 +60,13 @@ ActiveRecord::Schema.define(version: 20170607234538) do
     t.string   "region"
     t.string   "city"
     t.string   "dimension"
+    t.string   "make"
+    t.string   "model"
+    t.string   "os"
+    t.string   "osv"
+    t.string   "js"
+    t.string   "gender"
+    t.string   "yob"
     t.integer  "cost"
     t.datetime "timestamp"
   end
@@ -74,6 +84,13 @@ ActiveRecord::Schema.define(version: 20170607234538) do
 
   create_table "seats", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "email"
+  end
+
+  create_table "sites", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string "external_id"
+    t.string "publisher_id"
+    t.string "exchange_id"
+    t.string "domain"
   end
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
