@@ -11,11 +11,12 @@ You'll also need a running instance of Tranquility to send data to when running 
 ## Running Specs
 
 ```
+RACK_ENV=test rake db:drop
 RACK_ENV=test rake db:create
 RACK_ENV=test rake db:migrate
 RACK_ENV=test rake db:seed
 RACK_ENV=test rake db:test:prepare
-TRANQUILITY_URI=http://192.168.1.2:8200/v1/post/events-v1 bundle exec rspec
+RACK_ENV=test bundle exec rspec
 ```
 
 ## Firehose Schema
@@ -44,4 +45,10 @@ TRANQUILITY_URI=http://192.168.1.2:8200/v1/post/events-v1 bundle exec rspec
   "gender": "male",
   "yob": "1986"
 }
+```
+
+## Creating new migration
+
+```
+bundle exec rake db:create_migration NAME=create_campaigns
 ```

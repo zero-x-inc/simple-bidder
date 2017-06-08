@@ -9,13 +9,40 @@ module V1
 
       bid_request = BidRequestLoader.call(data: data)
 
-      RealtimeSender.call(
-        data: BidRequestSerializer.call(
+      if bid_request.present?
+        RealtimeSender.call(
+          data: BidRequestSerializer.call(
+            bid_request: bid_request
+          )
+        )
+
+        advertisement = Targeter.call(
           bid_request: bid_request
         )
-      )
 
-      status 204
+        if advertisement.present?
+          bid = Bidder.call(
+            advertisement: advertisement,
+            bid_request: bid_request
+          )
+
+          if bid.present? && bid.persisted?
+            bid_data = BidSerializer.call(
+              bid: bid
+            )
+
+            content_type :json
+            status 201
+            bid_data
+          else
+            status 204
+          end
+        else
+          status 204
+        end
+      else
+        status 204
+      end
     end
   end
 end
