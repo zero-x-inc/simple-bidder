@@ -73,5 +73,5 @@ TRANQUILITY_URI=https://shaman-proxy-staging.zero-x.co/v1/index/593a1a4ad68c5405
 Now run the script that sends bid requests, wins, and impressions to the web server.
 
 ```
-
+ruby bin/tester
 ```

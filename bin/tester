@@ -20,7 +20,9 @@ class Tester
           data: File.read('./samples/brandscreen/example-request-mobile.json')
         }
       ].each do |spec|
-        run_test(spec: spec)
+        (1..100).each do |index|
+          run_test(spec: spec)
+        end
       end
     end
 
