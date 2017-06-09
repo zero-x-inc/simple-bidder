@@ -5,11 +5,11 @@ require 'rspec'
 require 'rack/test'
 require './spec/spec_helper'
 
-describe V1::BidRequestController do
+describe V1::BidRequestsController do
   include Rack::Test::Methods
 
   def app
-    V1::BidRequestController
+    V1::BidRequestsController
   end
 
   context '.create' do

@@ -6,11 +6,11 @@ require 'rack/test'
 require './spec/spec_helper'
 require './spec/shared/shared_scope'
 
-describe V1::WinsController do
+describe V1::EventsController do
   include Rack::Test::Methods
 
   def app
-    V1::WinsController
+    V1::EventsController
   end
 
   context '.create' do
@@ -23,12 +23,12 @@ describe V1::WinsController do
     context 'when a valid scope exists' do
       include_context 'shared scope'
 
-      context 'when tracking a win' do
+      context 'when tracking an impression' do
         let(:params) {
           {
             'advertisement_id' => advertisement.id,
             'bid_id' => bid.id,
-            'price' => (1.50 * 1_000_000).to_i
+            'type' => 'impression'
           }
         }
 

@@ -1,16 +1,8 @@
 #\ -s puma
 require './app.rb'
 
-use Rack::Cors do
-  debug true
-
-  allow do
-    origins '*'
-    resource '/*', headers: :any, methods: :any
-  end
-end
-
-run AnalyticsProxyApp.new
-map('/v1/bid_request') { run V1::BidRequestController }
+run SimpleBidderApp.new
+map('/v1/bid_requests') { run V1::BidRequestsController }
 map('/v1/wins') { run V1::WinsController }
+map('/v1/events') { run V1::EventsController }
 map('/') { run SimpleBidderApp }

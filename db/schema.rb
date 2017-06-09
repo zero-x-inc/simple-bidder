@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 20170607234538) do
   create_table "advertisements", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "campaign_id"
     t.string "name"
+    t.string "dimension"
+    t.string "content"
+    t.string "preview_url"
   end
 
   create_table "apps", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

@@ -1,0 +1,100 @@
+$LOAD_PATH << Dir.pwd
+require 'app'
+
+class Tester
+  BID_REQUEST_URI = 'http://localhost:9292/v1/bid_request'
+
+  class << self
+    def call()
+      [
+        {
+          exchange_id: 'smaato',
+          data: File.read('./samples/smaato/rich-media.json')
+        },
+        {
+          exchange_id: 'rubicon',
+          data: File.read('./samples/rubiconproject/example-request-app-android-1.json')
+        },
+        {
+          exchange_id: 'brandscreen',
+          data: File.read('./samples/brandscreen/example-request-mobile.json')
+        }
+      ].each do |spec|
+        run_test(spec: spec)
+      end
+    end
+
+    def run_test(spec:)
+      br_resp = post_request(
+        url: "http://localhost:9292/v1/bid_requests/#{spec[:exchange_id]}",
+        data: spec[:data]
+      )
+
+      bid_id = JSON.parse(br_resp.body)['seatbid'].first['bid'].first['id']
+
+      get_request(
+        url: 'http://localhost:9292/v1/wins',
+        params: {
+          bid_id: bid_id,
+          price: '1.50'
+        }
+      )
+
+      get_request(
+        url: 'http://localhost:9292/v1/events',
+        params: {
+          bid_id: bid_id,
+          type: 'impression'
+        }
+      )
+
+      if [true, false].sample
+        get_request(
+          url: 'http://localhost:9292/v1/events',
+          params: {
+            bid_id: bid_id,
+            type: 'click'
+          }
+        )
+      end
+    end
+
+    def get_request(url:, params:)
+      conn = Faraday.new(url: url) do |faraday|
+        faraday.use FaradayMiddleware::FollowRedirects, limit: 5
+        faraday.request  :url_encoded
+        faraday.response :logger
+        faraday.adapter  Faraday.default_adapter
+      end
+
+      resp = conn.get do |req|
+        req.url url
+        req.params = params
+      end
+
+      puts "response: #{resp.body}"
+      return resp
+    end
+
+    def post_request(url:, data:)
+      conn = Faraday.new(url: url) do |faraday|
+        faraday.use FaradayMiddleware::FollowRedirects, limit: 5
+        faraday.request  :url_encoded
+        faraday.response :logger
+        faraday.adapter  Faraday.default_adapter
+      end
+
+      resp = conn.post do |req|
+        req.url url
+        req.headers['Content-Type'] = 'application/json'
+        req.body = data
+      end
+
+      puts "request body: #{data}"
+      puts "response: #{resp.body}"
+      return resp
+    end
+  end
+end
+
+Tester.call()

@@ -1,5 +1,5 @@
 module V1
-  class BidRequestController < SimpleBidderApp
+  class BidRequestsController < SimpleBidderApp
     post '/:exchange_id' do
       data = JSON.parse(request.env['rack.input'].read).merge(
         {
