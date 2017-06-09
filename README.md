@@ -11,11 +11,22 @@ You'll also need a running instance of Tranquility to send data to when running 
 ## Running Specs
 
 ```
+RACK_ENV=test rake db:drop
 RACK_ENV=test rake db:create
 RACK_ENV=test rake db:migrate
 RACK_ENV=test rake db:seed
 RACK_ENV=test rake db:test:prepare
-TRANQUILITY_URI=http://192.168.1.2:8200/v1/post/events-v1 bundle exec rspec
+RACK_ENV=test bundle exec rspec
+```
+
+## Configuring development environment
+
+```
+RACK_ENV=development rake db:drop
+RACK_ENV=development rake db:create
+RACK_ENV=development rake db:migrate
+RACK_ENV=development rake db:seed
+RACK_ENV=development rake db:test:prepare
 ```
 
 ## Firehose Schema
@@ -23,7 +34,6 @@ TRANQUILITY_URI=http://192.168.1.2:8200/v1/post/events-v1 bundle exec rspec
 ```
 {
   "timestamp": "2017-05-29T07:30:35+00:00",
-  "bid_requests": 1,
   "type": "bid_request",
   "exchange_id": "ADFDFGDAF",
   "publisher_id": "DFHGFGNSDFG",
@@ -39,9 +49,29 @@ TRANQUILITY_URI=http://192.168.1.2:8200/v1/post/events-v1 bundle exec rspec
   "os": "iOS",
   "osv": "7.1",
   "dimension": "320x480",
-  "blocked_attributes": ["1", "2"],
   "user_id": "ADGADFASDFASDF",
   "gender": "male",
   "yob": "1986"
 }
+```
+
+## Creating new migration
+
+```
+bundle exec rake db:create_migration NAME=create_campaigns
+```
+
+## Generating random sample data
+
+Start the web server:
+
+```
+TRANQUILITY_URI=https://shaman-proxy-staging.zero-x.co/v1/index/593a1a4ad68c54057090b38b/fa7cdcc2a478af82680070f61a3779a1 \
+ bundle exec puma
+```
+
+Now run the script that sends bid requests, wins, and impressions to the web server.
+
+```
+ruby bin/tester
 ```

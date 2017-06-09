@@ -1,6 +1,5 @@
-class BidRequestLoader
+class ScopeLoader
   class << self
-    ## create a bid request object that contains all found or created resources
     def call(data:)
       exchange = ExchangeLoader.call(data: data)
       publisher = PublisherLoader.call(data: data, exchange: exchange)
@@ -11,10 +10,7 @@ class BidRequestLoader
       slot = SlotLoader.call(data: data)
       user = UserLoader.call(data: data, exchange: exchange)
 
-      bid_request = BidRequest.new(
-        id: SecureRandom.hex,
-        timestamp: DateTime.now,
-        external_id: data['id'],
+      scope = Scope.new(
         exchange: exchange,
         publisher: publisher,
         app: app,
@@ -25,7 +21,7 @@ class BidRequestLoader
         user: user
       )
 
-      return bid_request
+      return scope
     end
   end
 end
