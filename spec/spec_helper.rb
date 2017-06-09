@@ -18,8 +18,9 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   config.before(:suite) do
+    FactoryGirl.find_definitions
     ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
-    #DatabaseCleaner.clean_with(:truncation)
-    #load './db/seeds.rb'
+    DatabaseCleaner.clean_with(:truncation)
+    load './db/seeds.rb'
   end
 end
